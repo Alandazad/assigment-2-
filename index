@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submission</title>
+</head>
+<body>
+    <h1>Submit Your Assignment</h1>
+    <form id="assignment-form">
+        <div>
+            <label for="student_name">Student Name:</label>
+            <input type="text" id="student_name" name="student_name" required>
+        </div>
+        <div>
+            <label for="assignment_title">Assignment Title:</label>
+            <input type="text" id="assignment_title" name="assignment_title" required>
+        </div>
+        <button type="button" onclick="submitAssignment()">Submit</button>
+    </form>
+
+    <script>
+        function submitAssignment() {
+            const form = document.getElementById('assignment-form');
+            const formData = new FormData(form);
+
+            const data = {
+                student_name: formData.get('student_name'),
+                assignment_title: formData.get('assignment_title')
+            };
+
+            fetch('http://localhost/api/create_assignment.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+    </script>
+</body>
+</html>
