@@ -1,0 +1,29 @@
+<?php
+include_once '../includes/db.php';
+
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $student_name = $_POST['student_name'];
+    $assignment_title = $_POST['assignment_title'];
+
+    if (empty($student_name) || empty($assignment_title)) {
+        http_response_code(400);
+        echo json_encode(["message" => "All fields are required"]);
+        exit();
+    }
+
+    $stmt = $conn->prepare("INSERT INTO assignments (student_name, assignment_title) VALUES (?, ?)");
+    $stmt->bind_param("ss", $student_name, $assignment_title);
+
+    if ($stmt->execute()) {
+        http_response_code(201);
+        echo json_encode(["message" => "Assignment submitted successfully"]);
+    } else {
+        http_response_code(500);
+        echo json_encode(["message" => "Error submitting assignment"]);
+    }
+
+    $stmt->close();
+}
+?>
