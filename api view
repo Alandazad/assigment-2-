@@ -1,0 +1,15 @@
+<?php
+include_once '../includes/db.php';
+
+header('Content-Type: application/json');
+
+$result = $conn->query("SELECT * FROM assignments");
+
+$assignments = [];
+
+while ($row = $result->fetch_assoc()) {
+    $assignments[] = $row;
+}
+
+echo json_encode($assignments);
+?>
